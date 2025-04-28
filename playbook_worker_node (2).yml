@@ -1,0 +1,21 @@
+- name: script execution
+  hosts: worker_node
+  become: yes
+  tasks:
+
+    - name: CP to RH
+      ansible.builtin.copy:
+        src: /home/kub/ans/workernode.sh
+        dest: /tmp/workernode.sh
+        mode: '0755'
+
+    - name: execute
+      ansible.builtin.stat:
+        path: "/tmp/skr/workernode.sh"
+      register: script_info
+
+    - name: execute
+      ansible.builtin.shell: ./workernode.sh
+      args:
+        chdir: /tmp
+

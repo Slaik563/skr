@@ -1,0 +1,21 @@
+- name: script execution
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: CP to RH
+      ansible.builtin.copy:
+        src: /home/kub/ans/set_calico.sh
+        dest: /tmp/set_calico.sh
+        mode: '0755'
+
+    - name: execute
+      ansible.builtin.stat:
+        path: "/tmp/skr/set_calico.sh"
+      register: script_info
+
+    - name: execute
+      ansible.builtin.shell: ./set_calico.sh
+      args:
+        chdir: /tmp
+

@@ -1,0 +1,20 @@
+- name: script execution
+  hosts: master_nodes
+  become: yes
+  tasks:
+
+    - name: CP to RH
+      ansible.builtin.copy:
+        src: /home/kub/ans/downkub.sh
+        dest: /tmp/downkub.sh
+        mode: '0755'
+
+    - name: execute
+      ansible.builtin.stat:
+        path: "/tmp/skr/downkub.sh"
+      register: script_info
+
+    - name: execute
+      ansible.builtin.shell: ./downkub.sh
+      args:
+        chdir: /tmp   

@@ -1,0 +1,19 @@
+- name: script execution
+  hosts: mstr1
+  become: yes
+  tasks:
+    - name: CP to RH
+      ansible.builtin.copy:
+        src: /home/kub/ans/init_kub_config_haproxy.sh
+        dest: /tmp/init_kub_config_haproxy.sh
+        mode: '0755'
+
+    - name: execute
+      ansible.builtin.stat:
+        path: "/tmp/skr/init_kub_config_haproxy.sh"
+      register: script_info
+
+    - name: execute
+      ansible.builtin.shell: ./init_kub_config_haproxy.sh
+      args:
+        chdir: /tmp
