@@ -35,10 +35,41 @@ echo '----------download and start/daemon  K8S done-----------------------------
 
 echo '----------configure config.toml-----------------------------------------------'
 sudo echo '
-plugins."io.containerd.grpc.v1.cri".containerd]
-  SystemdCgroup = true
-  snapshotter = "overlayfs"
-' > /etc/containerd/config.toml
+# Включение CRI плагина
+ [plugins."io.containerd.grpc.v1.cri"]
+   # Настройка образов (опционально)
+   sandbox_image = "registry.k8s.io/pause:3.10"  # Образ для sandbox контейнеров
+
+   # Настройка дополнительных параметров CRI (по желанию)
+   [plugins."io.containerd.grpc.v1.cri".containerd]
+     default_runtime_name = "runc"  # Используемый runtime
+     [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+       runtime_type = "io.containerd.runc.v2"
+       [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+         SystemdCgroup = true  # Включение драйвера cgroups
+
+  # Настройка логирования (опционально)
+   [plugins."io.containerd.grpc.v1.cri".containerd.default_runtime]
+     snapshotter = "overlayfs"  # Драйвер для слоев контейнеров
+     disable_snapshot_annotations = true
+
+ # Отключение неиспользуемых плагинов (опционально)
+ disabled_plugins = ["cri-containerd"]  # Отключение старого CRI плагина (если он есть)
+
+ # Настройка общих параметров containerd
+ version = 2  # Версия конфигурации
+ root = "/var/lib/containerd"  # Корневая директория для данных containerd
+ state = "/run/containerd"  # Директория для состояния containerd
+ oom_score = 0  # Приоритет OOM killer
+
+ # Настройка логирования (опционально)
+ [debug]
+   level = "info"  # Уровень логирования (info, debug, warn, error)
+
+ # Настройка garbage collection (опционально)
+ [gctrace]
+   interval = "1h"  # Интервал сборки мусора
+' | sudo tee /etc/containerd/config.toml
 echo '----------configure done------------------------------------------------------'
 
 echo '----------config crictl.yaml--------------------------------------------------'
@@ -47,7 +78,7 @@ runtime-endpoint: unix:///run/containerd/containerd.sock
 image-endpoint: unix:///run/containerd/containerd.sock
 timeout: 10
 debug: false
-' > /etc/crictl.yaml
+' | sudo tee /etc/crictl.yaml
 echo '----------configure done------------------------------------------------------'
 
 
