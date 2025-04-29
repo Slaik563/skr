@@ -49,7 +49,7 @@ sudo swapoff -a
 echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
 
 echo "----------Start kubedm init---------------------------------------------------------------"
-sudo kubeadm init --control-plane-endpoint "10.0.2.19:6443" --upload-certs --pod-network-cidr=192.168.0.0/16  | sudo tee /home/serv2/log_init.log
+sudo kubeadm init --control-plane-endpoint "192.168.1.7:6443" --upload-certs --pod-network-cidr=x.x.x.x/16  | sudo tee /home/serv2/log_init.log
 echo "----------recored /home/serv2/log_init.log------------------------------------------------"
 
 
