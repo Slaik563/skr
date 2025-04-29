@@ -2,7 +2,7 @@
 
 echo "----------calico start load/ set calico-----------------------------------------------" 
 
-cd /home/serv*/
+cd ~/
 sudo curl https://docs.projectcalico.org/manifests/calico.yaml -O
 
 sudo kubectl apply -f calico.yaml
@@ -11,5 +11,5 @@ echo "----------calico load/set done--------------------------------------------
 
 
 echo"-----------apply calico----------------------------------------------------------------"
-sudo kubectl apply -f /home/serv*/calico.yaml
+sudo kubectl apply -f calico.yaml
 echo"-----------done------------------------------------------------------------------------"
