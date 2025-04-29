@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo 1 | sudo tee /proc/sys/net/ipv4/ip_forward
+sudo swapoff -a
+
+
 echo '----------receiving key gpg---------------------------------------------------'
 sudo mkdir -p /etc/apt/keyrings/
 sudo curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
